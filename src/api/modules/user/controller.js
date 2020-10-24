@@ -1,12 +1,12 @@
+import Controller from '../../core/Controller'
 import UserService from "./service"
  
-export default class UserController{
-    constructor(){
-        this.service = UserService.getService()
-       
+export default class UserController extends Controller{
+
+    service = UserService.getService();
+
+    constructor() {
+        super(UserService.getService());
     }
-    getMany = async (req, res)=> {
-        const result = await this.service.getMany();
-        return res.json(result)
-    }
+   
 }

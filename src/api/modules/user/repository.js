@@ -1,17 +1,21 @@
-import UserService from "./service";
+import Repository from '../../core/Repository'
 import User from "../../../database/schemas/User"
-export default class UserRepository{
+
+export default class UserRepository extends Repository {
+
     static instance;
+
+    constructor(model) {
+        super(model)
+    }
+
+
     static getRepository()
     {
-        if(!UserRepository.instance)
+        if(UserRepository.instance == null)
         {
-            UserRepository.instance = new UserRepository()
+            UserRepository.instance = new UserRepository(User)
         }
         return UserRepository.instance
-    }
-    getMany()
-    {
-        return User.find()
     }
 }

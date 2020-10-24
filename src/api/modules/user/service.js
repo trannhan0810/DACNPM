@@ -1,18 +1,15 @@
+import Service from '../../core/Service'
 import UserRepository from "./repository"
 
-export default class UserService{
+export default class UserService extends Service{
     static instance;
-    constructor(){
-        this.repository = UserRepository.getRepository();
-    }
+  
     static getService() {
         if(!UserService.instance)
         {
-            UserService.instance = new UserService()
+            UserService.instance = new UserService(UserRepository.getRepository())
         }
         return UserService.instance
     }
-    getMany() {
-        return this.repository.getMany()
-    }
+    
 }
