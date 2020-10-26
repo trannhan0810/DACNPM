@@ -36,7 +36,7 @@ export default class Service {
         try { 
             return await this.repository.getMany(condition, column)
         } catch {
-
+            return []
         }
     }
 
