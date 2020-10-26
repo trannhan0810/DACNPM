@@ -13,27 +13,27 @@ export default class Controller {
     } 
 
     async getByIds(req, res) {
-        const { ids } = req.payload;
+        const ids = req.body;
         res.send(await this.service.getByIds(ids))
     } 
 
     async getOne(req, res) {
-        const { condition } = req;
+        const condition = req.body;
         res.send(await this.service.getOne(condition))
     }
 
     async getMany(req, res) {
-        const { condition } = req;
+        const condition = req.body;
         res.send(await this.service.getMany(condition))
     }
 
     async createOne(req, res) {
-        const { payload } = req;
+        const payload = req.body;
         res.send(await this.service.createOne(payload))
     }
 
     async createMany(req, res) {
-        const { data } = req.payload;
+        const data = req.body;
         res.send(await this.service.createMany(data))
     }
 
@@ -43,13 +43,13 @@ export default class Controller {
     }
 
     async deleteMany(req, res) {
-        const { ids } = req.payload;
+        const ids = req.body;
         res.send(await this.service.deleteMany(ids))
     }
 
     async updateOne(req, res) {
-        const { params, payload } = req;
-        const { id } = params;
+        const payload = req.body;
+        const { id } = req.params;
         res.send(await this.service.updateOne(id, payload))
     }
 }

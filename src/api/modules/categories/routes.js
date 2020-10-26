@@ -9,5 +9,5 @@ routes.get("/", categoryController.getMany.bind(categoryController))
 routes.get("/:id", categoryController.getById.bind(categoryController))
 routes.post("/", categoryController.createOne.bind(categoryController))
 routes.delete("/:id", categoryController.deleteOne.bind(categoryController))
-routes.patch("/:id", categoryController.updateOne.bind(categoryController))
+routes.put("/:id", categoryController.updateOne.bind(categoryController))
 export default routes
