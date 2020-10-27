@@ -13,17 +13,17 @@ export default class Controller {
     } 
 
     async getByIds(req, res) {
-        const ids = req.body;
+        const ids = req.params;
         res.send(await this.service.getByIds(ids))
     } 
 
     async getOne(req, res) {
-        const condition = req.body;
+        const condition = req.params;
         res.send(await this.service.getOne(condition))
     }
 
     async getMany(req, res) {
-        const condition = req.body;
+        const condition = req.params;
         res.send(await this.service.getMany(condition))
     }
 
