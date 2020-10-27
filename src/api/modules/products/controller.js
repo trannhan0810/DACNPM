@@ -15,7 +15,7 @@ export default class ProductController extends Controller{
     }
 
     async getManyWithRelation(req, res) {
-        const condition = req.body
+        const condition = req.query
         res.send(await this.service.getManyWithRelation(condition));
     }
 }
