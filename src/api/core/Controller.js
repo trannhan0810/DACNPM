@@ -18,12 +18,12 @@ export default class Controller {
     } 
 
     async getOne(req, res) {
-        const condition = req.params;
+        const condition = req.query;
         res.send(await this.service.getOne(condition))
     }
 
     async getMany(req, res) {
-        const condition = req.params;
+        const condition = req.query;
         res.send(await this.service.getMany(condition))
     }
 
