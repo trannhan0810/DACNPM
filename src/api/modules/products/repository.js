@@ -19,6 +19,10 @@ export default class ProductRepository extends Repository {
         return ProductRepository.instance
     }
     
+    getByIdWithRelation(id, column = []) {
+        return this.model.findById(id).populate('brand').populate('category');
+    }
+
     getManyWithRelation(condition = {}, column = []) {
         return this.model.find(condition).populate('brand').populate('category');
     }
