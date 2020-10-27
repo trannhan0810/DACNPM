@@ -1,15 +1,18 @@
 import Service from '../../core/Service'
-import CategoryRepository from './repository'
+import ProductRepository from './repository'
 
-export default class CategoryService extends Service{
+export default class ProductService extends Service{
     static instance;
   
     static getService() {
-        if(!CategoryService.instance)
+        if(!ProductService.instance)
         {
-            CategoryService.instance = new CategoryService(CategoryRepository.getRepository())
+            ProductService.instance = new ProductService(ProductRepository.getRepository())
         }
-        return CategoryService.instance
+        return ProductService.instance
     }
     
+    async getManyWithRelation(condition = {}, column = []) {
+        return await this.repository.getManyWithRelation(condition = {}, column = []);
+    }
 }

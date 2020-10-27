@@ -18,4 +18,8 @@ export default class ProductRepository extends Repository {
         }
         return ProductRepository.instance
     }
+    
+    getManyWithRelation(condition = {}, column = []) {
+        return this.model.find(condition).populate('brand').populate('category');
+    }
 }

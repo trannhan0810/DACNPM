@@ -1,9 +1,10 @@
 import { Router } from 'express'
 import UserController from './controller'
-const route = Router()
+const routes = Router()
 const userController = new UserController()
 
-route.get("/", userController.getMany.bind(userController))
-route.get("/:id", userController.getById.bind(userController))
-route.post("/", userController.createOne.bind(userController))
-export default route
+routes.get("/", userController.getMany.bind(userController))
+routes.get("/:id", userController.getById.bind(userController))
+routes.post("/", userController.createOne.bind(userController))
+routes.put("/:id", userController.updateOne.bind(userController))
+export default routes
