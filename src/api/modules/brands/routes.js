@@ -16,21 +16,22 @@ routes.get("/", brandController.getMany.bind(brandController))
  * path:
  *  /brands/:
  *    get:
- *      summary: Get all brand map params
+ *      summary: Get all brand filter by conditional in params if have, else return all brand
  *      tags: [Brand]
  *      parameters:
  *      - in: path
  *        name: name
  *        schema:
  *          type: string
- *        description: If have params return list of brands map the params else return all brands
  *      responses:
  *        "200":
  *          description: Return a list brands map the params.
  *          content:
  *            application/json:
  *              schema:
- *                $ref: '#/components/schemas/Brand'
+ *                type: array
+ *                items:     
+ *                  $ref: '#/components/schemas/Brand'
  */ 
 
 
@@ -66,7 +67,7 @@ routes.post("/", brandController.createOne.bind(brandController))
  *        content:
  *          application/json:
  *            schema:
- *              $ref: '#/components/schemas/BrandWithoutID'
+ *              $ref: '#/components/schemas/BrandSubmit'
  *      responses:
  *        "200":
  *          description: Return created brand.
@@ -109,7 +110,7 @@ routes.put("/:id", brandController.updateOne.bind(brandController))
  *        content:
  *          application/json:
  *            schema:
- *              $ref: '#/components/schemas/BrandWithoutID'
+ *              $ref: '#/components/schemas/BrandSubmit'
  *      responses:
  *        "200":
  *          description: Return brand before updated.
@@ -128,16 +129,16 @@ routes.put("/:id", brandController.updateOne.bind(brandController))
  *      required:
  *        - name
  *      properties:
- *        id:
+ *        _id:
  *          type: string
  *          description: Auto-gen mongodb key
  *        name:
  *          type: string
  *          description: Brand's name
  *      example:
- *        id: 5f945a54ec925e046a5d4e92
+ *        _id: 5f945a54ec925e046a5d4e92
  *        name: Asus
- *    BrandWithoutID:
+ *    BrandSubmit:
  *      type: object
  *      required:
  *        - name

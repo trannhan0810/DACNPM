@@ -12,17 +12,16 @@ export default class ProductService extends Service{
         return ProductService.instance
     }
     
-    async getByIDWithRelation(id, column = []) {
+    async getByIdWithRelation(id, column = []) {
         try {
-            return await this.repository.getByIDWithRelation(id, column = []);
-        } catch {
-            
+            return await this.repository.getByIdWithRelation(id, column);
+        } catch(err) {
         }
     }
 
     async getManyWithRelation(condition = {}, column = []) {
         try {
-            return await this.repository.getManyWithRelation(condition = {}, column = []);
+            return await this.repository.getManyWithRelation(condition, column);
         } catch {
 
         }

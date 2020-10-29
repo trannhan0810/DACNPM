@@ -16,7 +16,11 @@ const options = {
             },
         ],
     },
-    apis: ['./src/api/modules/brands/routes.js'],
+    apis: [
+        './src/api/modules/brands/routes.js',
+        './src/api/modules/products/routes.js',
+        './src/api/modules/categories/routes.js',
+    ],
 };
 
 export default (app) => {

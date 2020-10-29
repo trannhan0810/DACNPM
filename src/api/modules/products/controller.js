@@ -9,9 +9,9 @@ export default class ProductController extends Controller{
         super(ProductService.getService());
     }
    
-    async getByIDWithRelation(req, res) {
-        const { id } = req.param 
-        res.send(await this.service.getByIDWithRelation(id));
+    async getByIdWithRelation(req, res) {
+        const { id } = req.params 
+        res.send(await this.service.getByIdWithRelation(id));
     }
 
     async getManyWithRelation(req, res) {

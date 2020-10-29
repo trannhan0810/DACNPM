@@ -12,7 +12,7 @@ var ProductSchema = new Schema({
     id_brand:       {type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Brand'},
     price:          {type: Number, required: true},
     sales_price:    {type: Number, default:0},
-    quatity:        {type: Number, default: 20},
+    quantity:        {type: Number, default: 20},
     id_category:    {type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Category'},
     image:          {type: Array},
     description:    {type: String, required: true},
