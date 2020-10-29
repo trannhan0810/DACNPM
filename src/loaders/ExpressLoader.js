@@ -3,6 +3,9 @@ import http from 'http'
 import morgan from 'morgan'
 import bodyParser from 'body-parser'
 import routes from '../api/routes';
+import swaggerDocs from './swaggerDocs'
+
+
 class ExpressLoader{
     
     constructor()
@@ -28,6 +31,8 @@ class ExpressLoader{
             res.header('Access-Controll-Allow-Headers', 'Origin, X-request-With, Content-Type, Accept, Authorization')
             next();
         })
+        //Swaggers
+        swaggerDocs(this.app)
     }
 
     boot()
