@@ -11,12 +11,15 @@ const options = {
             description: "This is a simple CRUD API application made with Express and documented with Swagger",
         },
         servers: [
-            {  
-                url: "http://localhost:5000/"
+            {
+                url: "https://dacnpm-test.herokuapp.com/",
             },
             {
                 url: "http://dacnpm-test.herokuapp.com/",
-            }
+            },
+            {  
+                url: "http://localhost:5000/"
+            },
         ],
     },
     apis: [
