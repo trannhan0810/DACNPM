@@ -25,13 +25,13 @@ class ExpressLoader{
 
         //3rd party middleware
         //CORS settings
-        /*this.app.use((req, res, next) =>{
-            res.header('Access-Controll-Allow-Origin', '*')
-            res.header('Access-Controll-Allow-Method', 'GET, PUT, POST, DELETE, PATCH, OPTION, HEAD')
-            res.header('Access-Controll-Allow-Headers', 'Origin, X-request-With, Content-Type, Accept, Authorization')
+        this.app.use((req, res, next) =>{
+            res.header('Access-Control-Allow-Origin', '*')
+            res.header('Access-Control-Allow-Method', 'GET, PUT, POST, DELETE, PATCH, OPTION, HEAD')
+            res.header('Access-Control-Allow-Headers', 'Origin, X-request-With, Content-Type, Accept, Authorization')
             next();
-        })*/
-        this.app.use(cors())
+        })
+        //his.app.use(cors())
         //Swaggers
         swaggerDocs(this.app)
     }
