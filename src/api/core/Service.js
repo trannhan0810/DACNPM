@@ -1,4 +1,5 @@
 import Repository from './Repository'
+import {httpException} from '../utils/errors/http'
 
 export default class Service {
     repository = Repository
@@ -11,7 +12,7 @@ export default class Service {
         try { 
             return await this.repository.getById(id, column)
         } catch {
-
+            throw new Error(httpException['404'])
         }
     } 
 

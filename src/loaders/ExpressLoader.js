@@ -4,7 +4,7 @@ import morgan from 'morgan'
 import bodyParser from 'body-parser'
 import routes from '../api/routes';
 import swaggerDocs from './swaggerDocs'
-
+import cors from 'cors'
 
 class ExpressLoader{
     
@@ -25,12 +25,13 @@ class ExpressLoader{
 
         //3rd party middleware
         //CORS settings
-        this.app.use((req, res, next) =>{
+        /*this.app.use((req, res, next) =>{
             res.header('Access-Controll-Allow-Origin', '*')
             res.header('Access-Controll-Allow-Method', 'GET, PUT, POST, DELETE, PATCH, OPTION, HEAD')
             res.header('Access-Controll-Allow-Headers', 'Origin, X-request-With, Content-Type, Accept, Authorization')
             next();
-        })
+        })*/
+        this.app.use(cors())
         //Swaggers
         swaggerDocs(this.app)
     }
