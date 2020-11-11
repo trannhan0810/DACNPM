@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
 
 const  { Schema } = mongoose;
+const  { ObjectId } = Schema.Types
 
 const options = {
     versionKey: false,
@@ -9,11 +10,11 @@ const options = {
 
 var ProductSchema = new Schema({
     name:           {type: String, required: true },
-    id_brand:       {type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Brand'},
+    id_brand:       {type: ObjectId, required: true, ref: 'Brand'},
     price:          {type: Number, required: true},
     sales_price:    {type: Number, default:0},
-    quantity:        {type: Number, default: 20},
-    id_category:    {type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Category'},
+    quantity:       {type: Number, default: 20},
+    id_category:    {type: ObjectId, required: true, ref: 'Category'},
     image:          {type: Array},
     description:    {type: String, required: true},
     product_detail: {type: Object, required: true},
