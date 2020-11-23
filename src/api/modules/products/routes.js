@@ -258,4 +258,5 @@ routes.put("/:id", productController.updateOne.bind(productController))
  *          Bộ nhớ đệm: "8MB Cache"
  *        create_at: 2020-10-27T07:03:59.202Z
  */
+
 export default routes

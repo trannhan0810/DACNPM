@@ -18,4 +18,13 @@ export default class UserRepository extends Repository {
         }
         return UserRepository.instance
     }
+
+    Register(payload) {
+        return this.model.create(payload)
+    } 
+
+    Login(condition = {}, column = []) {
+        return this.model.findOne(condition).select(column)
+    }
+    
 }

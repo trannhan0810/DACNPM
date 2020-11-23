@@ -1,7 +1,6 @@
 {
-  "name": "Node_SELF",
+  "name": "node_self",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -22,6 +21,8 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "joi": "^17.3.0",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.10.9",
     "morgan": "^1.10.0",
     "swagger-jsdoc": "^4.3.1",
@@ -31,5 +32,14 @@
     "eslint": "^7.11.0",
     "eslint-config-airbnb": "^18.2.0",
     "nodemon": "^2.0.6"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/trannhan0810/DACNPM.git"
+  },
+  "bugs": {
+    "url": "https://github.com/trannhan0810/DACNPM/issues"
+  },
+  "homepage": "https://github.com/trannhan0810/DACNPM#readme",
+  "description": ""
 }

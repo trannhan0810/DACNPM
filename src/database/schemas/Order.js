@@ -17,11 +17,11 @@ var OrderSchema = new Schema({
     /**
      * Submitted
      * Processing
-     * Shipped
-     * Package Delayed
-     * Out for delivery
-     * Dilivered
      * Cancelled
+     * Shipped
+     * Package Delayed (Đơn hàng lớn, vận chuyển lâu ....)
+     * Delivered
+     
      */
     create_at:      { type: Date, default: Date.now},
 }, options)

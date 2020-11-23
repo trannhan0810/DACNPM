@@ -11,5 +11,21 @@ export default class UserService extends Service{
         }
         return UserService.instance
     }
+    async Register(payload){
+        try { 
+            return await this.repository.Register(payload)
+        } catch {
+            
+        }
+    }
+
+    async Login(payload){
+        try { 
+            return await this.repository.Login(payload)
+        } catch {
+            
+        }
+
+    }
     
 }
