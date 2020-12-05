@@ -1,5 +1,7 @@
 import { Router } from 'express'
+import { authenticateToken } from '../auth/controller'
 import BrandController from './controller'
+
 
 /** @swagger
  * tags:
@@ -10,7 +12,7 @@ import BrandController from './controller'
 const routes = Router()
 const brandController = new BrandController()
 
-routes.get("/", brandController.getMany.bind(brandController))
+routes.get("/",authenticateToken, brandController.getMany.bind(brandController))
 /**
  * @swagger
  * path:
@@ -35,7 +37,7 @@ routes.get("/", brandController.getMany.bind(brandController))
  */ 
 
 
-routes.get("/:id", brandController.getById.bind(brandController))
+routes.get("/:id",authenticateToken, brandController.getById.bind(brandController))
 /**
  * @swagger
  * path:

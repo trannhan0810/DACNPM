@@ -4,6 +4,7 @@ import mongoose from 'mongoose'
 export default class MongoLoader{
     async boot() {
         try{
+            mongoose.set('useCreateIndex', true);
             mongoose.Promise = global.Promise;
             mongoose.connect(process.env.MONGO_CONNECTION, {
                 useUnifiedTopology:true,

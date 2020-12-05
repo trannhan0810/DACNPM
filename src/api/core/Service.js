@@ -1,5 +1,6 @@
+import Boom from '@hapi/boom'
 import Repository from './Repository'
-import {httpException} from '../utils/errors/http'
+
 
 export default class Service {
     repository = Repository
@@ -12,7 +13,7 @@ export default class Service {
         try { 
             return await this.repository.getById(id, column)
         } catch {
-            throw new Error(httpException['404'])
+            throw Boom.notFound()
         }
     } 
 
@@ -20,7 +21,7 @@ export default class Service {
         try { 
             return await this.repository.getByIds(id, column)
         } catch {
-
+            throw Boom.notFound()
         }
     } 
 
@@ -28,7 +29,7 @@ export default class Service {
         try { 
             return await this.repository.getOne(condition, column)
         } catch {
-
+            throw Boom.notFound()
         }
        
     }
@@ -37,7 +38,7 @@ export default class Service {
         try { 
             return await this.repository.getMany(condition, column)
         } catch {
-            return []
+            throw Boom.notFound()
         }
     }
 
@@ -45,7 +46,7 @@ export default class Service {
         try { 
             return await this.repository.createOne(payload)
         } catch {
-
+            
         }
     }
 

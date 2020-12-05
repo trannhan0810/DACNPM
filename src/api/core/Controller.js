@@ -7,7 +7,7 @@ export default class Controller {
         this.service = service
     }
 
-    async getById(req, res) {
+    async getById(req, res, next) {
         const { id } = req.params;
         res.send(await this.service.getById(id))
     } 
@@ -22,7 +22,7 @@ export default class Controller {
         res.send(await this.service.getOne(condition))
     }
 
-    async getMany(req, res) {
+    async getMany(req, res, next) {
         const condition = req.query;
         res.send(await this.service.getMany(condition))
     }

@@ -1,31 +1,19 @@
 import mongoose from 'mongoose'
 const Joi = require('joi')
 const { Schema } = mongoose
+const { ObjectId } = Schema.Types
 
 const options = {
     versionKey: false
 }
 
 const UserSchema = new Schema({
-    name:{
-        type:String,
-        required:true,
-        default: "Nguyen Van A"
-    },
-    username:{
-        type:String,
-        required:true
-    }, 
-    password: {
-        type:String,
-        required:true
-    },
-    created: { 
-        type: Date,
-        default: Date.now
-    },
-    
-})
+    name:       { type: String, required:true, default: "Nguyen Van A" },
+    username:   { type: String, required:true, index: true, unique: true, lowercase: true }, 
+    password:   { type: String, required:true },
+    id_role:    { type: ObjectId, },
+    created_at: { type: Date, default: Date.now },
+}, options)
 
 // UserSchema.methods.joiValidate = function(obj) {
 // 	var schema = {
