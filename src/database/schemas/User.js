@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import mongoHidden from 'mongoose-hidden'
 const Joi = require('joi')
 const { Schema } = mongoose
 const { ObjectId } = Schema.Types
@@ -10,10 +11,12 @@ const options = {
 const UserSchema = new Schema({
     name:       { type: String, required:true, default: "Nguyen Van A" },
     username:   { type: String, required:true, index: true, unique: true, lowercase: true }, 
-    password:   { type: String, required:true },
+    password:   { type: String, required:true, hide: true },
     id_role:    { type: ObjectId, },
     created_at: { type: Date, default: Date.now },
 }, options)
+
+UserSchema.plugin(mongoHidden())
 
 // UserSchema.methods.joiValidate = function(obj) {
 // 	var schema = {
