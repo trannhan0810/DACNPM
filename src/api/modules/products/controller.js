@@ -1,5 +1,6 @@
 import Controller from '../../core/Controller'
 import ProductService from './service';
+import _ from 'lodash'
 
 export default class ProductController extends Controller{
 
@@ -15,7 +16,9 @@ export default class ProductController extends Controller{
     }
 
     async getManyWithRelation(req, res) {
-        const condition = req.query
-        res.send(await this.service.getManyWithRelation(condition));
+        const condition = _.omit(req.query, 'limit')
+        const result = await this.service.getManyWithRelation(condition)
+        const limit = req.query.limit||result.length
+        res.send(result.slice(0,limit))
     }
 }

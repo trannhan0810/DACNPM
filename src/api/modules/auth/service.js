@@ -48,12 +48,16 @@ export default class AuthService extends Service{
             console.log(bcrypt.hashSync(password, salt))
             if (!bcrypt.compareSync(password, user.password)) throw Boom.badRequest("Wrong password");
 
-            const accessToken = jwt.sign({username}, process.env.ACCESS_TOKEN_SECRET)
+            const accessToken = jwt.sign({username: username}, process.env.ACCESS_TOKEN_SECRET)
             return {accessToken : accessToken}
         } catch(err) {
             throw(err)
         }
 
+    }
+
+    async getMe(username) {
+        return this.repository.getOne({username: username})
     }
     
 }

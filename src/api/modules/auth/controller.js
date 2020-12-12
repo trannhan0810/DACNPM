@@ -1,6 +1,7 @@
 import Controller from '../../core/Controller'
 import AuthService from "./service"
 import jwt from 'jsonwebtoken'
+import UserService from '../users/service';
 
 export default class AuthController extends Controller{
 
@@ -19,6 +20,11 @@ export default class AuthController extends Controller{
         const payload = req.body
         res.send(await this.service.login(payload))
     }
+
+    async getMe(req, res, next) {
+        const username = req.user.username
+        res.send(await this.service.getMe(username))
+    } 
 }
 
 export let authenticateToken = (req, res, next) => {
@@ -28,8 +34,9 @@ export let authenticateToken = (req, res, next) => {
     const user = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
         if(err) return res.sendStatus(403)
         req.user = user;
-        console.log(user)
-        console.log(req.baseUrl + req.route.path)
+        console.log("username: " + req.user.username)
+        console.log("api_path: " + req.baseUrl + req.route.path)
+        console.log("api_method: " + req.method)
         next() 
     })  
 }
