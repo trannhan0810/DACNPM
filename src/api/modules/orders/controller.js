@@ -2,10 +2,13 @@ import { override } from 'joi';
 import Controller from '../../core/Controller'
 import OrderService from './service';
 import ProductService from '../products/service'
+import OrderItemService from '../order_item/service'
+var mongoose = require('mongoose');
 export default class OrderController extends Controller{
 
     service = OrderService.getService();
     productService  = ProductService.getService();
+    orderItemService = OrderItemService.getService();
     constructor() {
         super(OrderService.getService());
     }
@@ -57,4 +60,38 @@ export default class OrderController extends Controller{
             res.status(400).send("Invalid Quantity")
         }
     }
+
+    async getOrderbyUserId(req, res){
+        const user_id = req.body.id_user
+        console.log(user_id)
+        let id = mongoose.Types.ObjectId(user_id)
+        console.log(id)
+        let query  = {"id_user" : id}
+        let orders = await this.service.getMany(query)
+        let result = await Promise.all(
+            orders.map(async order => {
+                const id = {"id_order" : order.id}
+                
+                let orderItem = await this.orderItemService.getMany(id)
+                
+                let result2 = await Promise.all(
+                    orderItem.map(async item =>{
+                        let product = await this.productService.getById(item["id_product"])
+                        item = item["_doc"]
+                        Object.assign(item, {"product_name" : product["name"]})
+                        return item
+                    })
+                )
+                orderItem = result2
+                order = order["_doc"]
+                return {
+                    ...order, orderItem
+                }
+            },
+        ))
+        // console.log(result)
+        res.send(result)
+        
+    }
+    
 }
