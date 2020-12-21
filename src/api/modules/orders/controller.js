@@ -23,19 +23,38 @@ export default class OrderController extends Controller{
         const {items} = req.body
         // let id_order = {"id_order" : order.id}
         console.log(typeof(items))
-        
+        let check = true;
         for(let i = 0; i< items.length; i++){
-
-            items[i]["id_order"] = order.id
-            
             let product = await this.productService.getById(items[i]["id_product"])
-            items[i]["price"] = product["price"]* items[i]["quantity"]
-            console.log(product)
-            this.service.createItem(items[i])
+            if(product["quantity"] < items[i]["quantity"]){
+                check =  false
+            }
         }
-        order = {
-            ...order['_doc'], items
+        if(check){
+            try {
+                for(let i = 0; i< items.length; i++){
+                    
+                    items[i]["id_order"] = order.id
+                    
+                    let product = await this.productService.getById(items[i]["id_product"])
+                    
+                    product["quantity"] = product["quantity"] - items[i]["quantity"]
+                    let update_quantity = {"quantity" : product["quantity"]}
+                    await this.productService.updateOne(product.id, update_quantity)
+                    items[i]["price"] = product["price"]* items[i]["quantity"]
+                    console.log(product)
+                    this.service.createItem(items[i])
+                }   
+                order = {
+                    ...order['_doc'], items
+                }
+                res.send(order)     
+            }    
+            catch (error) {
+                res.status(404).send("Not found")
+            }
+        }else{
+            res.status(400).send("Invalid Quantity")
         }
-        res.send(order)
     }
 }

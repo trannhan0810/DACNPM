@@ -11,5 +11,5 @@ const RoleSchema = new Schema({
     name:       { type: String, required:true},
     created_at: { type: Date, default: Date.now },
 }, options)
- 
+
 export default mongoose.model("roles", RoleSchema)
