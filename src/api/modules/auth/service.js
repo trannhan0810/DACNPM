@@ -48,7 +48,7 @@ export default class AuthService extends Service{
             console.log(bcrypt.hashSync(password, salt))
             if (!bcrypt.compareSync(password, user.password)) throw Boom.badRequest("Wrong password");
 
-            const accessToken = jwt.sign({username: username}, process.env.ACCESS_TOKEN_SECRET)
+            const accessToken = jwt.sign({id: user.id}, process.env.ACCESS_TOKEN_SECRET)
             return {accessToken : accessToken}
         } catch(err) {
             throw(err)
@@ -56,8 +56,17 @@ export default class AuthService extends Service{
 
     }
 
-    async getMe(username) {
-        return this.repository.getOne({username: username})
+    async getMe(id) {
+        return this.repository.getById(id)
     }
     
+    async authorize(id, api_path, api_method) {
+        const userPermission = []
+        userPermission = await this.repository.getPermission(id)
+        const routePermission = await this.repository.getRoutePermission(api_path,api_method)
+        if(userPermission.some((value, index)=> value === routePermission)) {
+            return true;
+        }
+        return false;  
+    }
 }

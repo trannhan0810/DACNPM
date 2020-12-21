@@ -11,12 +11,12 @@ const options = {
 const UserSchema = new Schema({
     name:       { type: String, required:true, default: "Nguyen Van A" },
     username:   { type: String, required:true, index: true, unique: true, lowercase: true }, 
-    password:   { type: String, required:true, hide: true },
-    id_role:    { type: ObjectId, },
-    created_at: { type: Date, default: Date.now },
+    password:   { type: String, required:true, },
+    id_role:    { type: ObjectId,},
+    created_at: { type: Date, default: Date.now, },
 }, options)
 
-UserSchema.plugin(mongoHidden())
+UserSchema.plugin(mongoHidden({ defaultHidden: { password: true, id_role: false } }))
 
 // UserSchema.methods.joiValidate = function(obj) {
 // 	var schema = {

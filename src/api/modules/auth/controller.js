@@ -2,6 +2,7 @@ import Controller from '../../core/Controller'
 import AuthService from "./service"
 import jwt from 'jsonwebtoken'
 import UserService from '../users/service';
+import Boom from '@hapi/boom'
 
 export default class AuthController extends Controller{
 
@@ -22,21 +23,28 @@ export default class AuthController extends Controller{
     }
 
     async getMe(req, res, next) {
-        const username = req.user.username
-        res.send(await this.service.getMe(username))
+        const id = req.user.id
+        res.send(await this.service.getMe(id))
     } 
 }
 
-export let authenticateToken = (req, res, next) => {
+export let  authenticateToken = async (req, res, next) => {
     const authHeader = req.headers['authorization']
     const token  =  authHeader && authHeader.split(' ')[1]
-    if(token == null) return res.sendStatus(401)
-    const user = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-        if(err) return res.sendStatus(403)
+    if(token == null) throw Boom.unauthorized()
+    const user = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, user) => {
+        if(err) throw Boom.unauthorized()
         req.user = user;
-        console.log("username: " + req.user.username)
-        console.log("api_path: " + req.baseUrl + req.route.path)
-        console.log("api_method: " + req.method)
-        next() 
     })  
+    if(req.user != null) {
+        const id = req.user.id
+        const api_path = req.baseUrl + req.route.path
+        const api_method = req.method
+        const haveAuthor = await AuthService.getService().authorize(id, api_path, api_method)
+        if(haveAuthor == false) throw Boom.forbidden()
+        next() 
+    }
+    
+    
+   
 }

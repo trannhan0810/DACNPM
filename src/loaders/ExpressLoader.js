@@ -45,7 +45,7 @@ class ExpressLoader{
         this.app.use("/", routes)
 
         this.app.use((err, req, res, next) => {
-            if(err.isBoom && err.isBoom == true) res.status(err.output.statusCode).send(err.output.payload)
+            if(err.isBoom!= null && err.isBoom == true) res.status(err.output.statusCode).send(err.output.payload)
             else {
                 console.log(err)
                 res.status(500).send("Something is wrong on server")
