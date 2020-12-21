@@ -61,10 +61,10 @@ export default class AuthService extends Service{
     }
     
     async authorize(id, api_path, api_method) {
-        const userPermission = []
-        userPermission = await this.repository.getPermission(id)
-        const routePermission = await this.repository.getRoutePermission(api_path,api_method)
-        if(userPermission.some((value, index)=> value === routePermission)) {
+        const userPermission = await this.repository.getPermission(id)
+        const routePermission = await this.repository.getRoutePermission(api_path, api_method)
+        if(routePermission == null) return true;
+        if(userPermission.some((value)=> value === routePermission)) {
             return true;
         }
         return false;  

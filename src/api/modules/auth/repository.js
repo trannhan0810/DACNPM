@@ -40,7 +40,7 @@ export default class UserRepository extends Repository {
     }
 
     async getRoutePermission(api_path, api_method) {
-        return Authorization.find({api_path: api_path, api_method: api_method}).select("id_per")
+        return Authorization.findOne({api_path: api_path, api_method: api_method}).select("id_per")
     }
 
 }
