@@ -8,7 +8,7 @@ const options = {
 }
 
 var OrderSchema = new Schema({
-    id_user:        { type: ObjectId, required: true },
+    id_user:        { type: ObjectId, required: true},
     id_coupon:      { type: ObjectId },
     totalPrice:     { type: Number, required: true },
     customer_phone: { type: String },
