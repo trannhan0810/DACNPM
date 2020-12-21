@@ -16,4 +16,11 @@ export default class OrderService extends Service{
         return this.repository.createItem(payload)
     }
     
+    getOrderbyUserId(payload){
+        return this.repository.getOrderbyUserid(payload)
+    }
+
+    async getOrderItembyOrderId(payload){
+        return await this.repository.getOrderItembyOrderId(payload)
+    }
 }
