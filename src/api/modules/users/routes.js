@@ -8,4 +8,5 @@ routes.get("/" , userController.getMany.bind(userController))
 routes.get("/:id", userController.getById.bind(userController))
 routes.post("/", userController.createOne.bind(userController))
 routes.put("/:id", userController.updateOne.bind(userController))
+routes.delete("/:id", userController.deleteOne.bind(userController))
 export default routes

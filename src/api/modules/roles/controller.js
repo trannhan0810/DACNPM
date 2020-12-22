@@ -8,4 +8,9 @@ export default class RoleController extends Controller{
         super(RoleService.getService());
     }
 
+    async getAllRoleAndPermiss(req, res) {
+        const result = await this.service.getAllRoleAndPermiss()
+        res.send(result)
+    }
+
 }
