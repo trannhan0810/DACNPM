@@ -22,11 +22,8 @@ export default class OrderController extends Controller{
     async createOne(req, res){
         const data = req.body;
     
-       
-        console.log("New Order :   ")
-        console.log(order)
         const {items} = req.body
-        // let id_order = {"id_order" : order.id}
+       
         console.log(typeof(items))
         let check = true;
         for(let i = 0; i< items.length; i++){
