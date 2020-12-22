@@ -31,16 +31,26 @@ export default class UserRepository extends Repository {
         return this.model.findOne(condition).select(column)
     }
     
-    async getPermission(id) {
+    async getUserPermiss(id) {
         const user = await this.model.findById(id)
         const id_role = user.id_role
-        const ids_permission = await Permiss_Detail.find({'id_role': id_role})
-        const permissions = await Permission.find({'_id': { $in: ids_permission}})
+        const permiss_details = await Permiss_Detail.find({'id_role': id_role}).select("id_per")
+        const permissions = permiss_details.map((permiss_detail) => permiss_detail.id_per)
         return permissions
     }
 
-    async getRoutePermission(api_path, api_method) {
-        return Authorization.findOne({api_path: api_path, api_method: api_method}).select("id_per")
+    async getRoutePermiss(api_path, api_method) {
+        const permiss = await Authorization.findOne({api_path: api_path, api_method: api_method}).select("id_per")
+        return permiss.id_per
     }
 
+    async getAuths() {
+        const auths = await Authorization.find({})
+        return Promise.all(auths.map(async (auth)=>{
+            let permiss = await Permission.findById(auth.id_per)
+            let authObj = auth.toObject()
+            authObj.permiss = permiss
+            return authObj
+        }))
+    }
 }

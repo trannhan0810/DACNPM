@@ -62,22 +62,32 @@ export default class AuthService extends Service{
     async getMe(id) {
         const user = await this.repository.getById(id)
         const userObject = user.toObject();
-        console.log(userObject)
         const role = await this.roleService.getById(userObject.id_role)
         userObject.role = role.name
         return userObject
     }
     
+    async getRoutePermiss(api_path, api_method) {
+        return this.repository.getRoutePermiss(api_path, api_method)
+    }
+
+    async getUserPermiss(id_user) {
+        return this.repository.getUserPermiss(id_user)
+    }
+
     async authorize(id, api_path, api_method) {
         const [userPermission, routePermission] = await Promise.all([
             this.repository.getPermission(id),
-            this.repository.getRoutePermission(api_path, api_method)
+            this.repository.getRoutePermiss(api_path, api_method)
         ])
-        console.log([userPermission, routePermission])
         if(routePermission == null) return true;
         if(userPermission.some((value)=> value === routePermission)) {
             return true;
         }
         return false;  
+    }
+
+    async getAuths() {
+        return this.repository.getAuths()
     }
 }
