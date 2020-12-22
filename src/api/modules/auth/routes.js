@@ -11,8 +11,7 @@ const authController = new AuthController()
  *   description: API to manage your brands.
  */
 
-routes.get("/me",authenticateToken, authController.getMe.bind(authController))
+routes.get("/me", authenticateToken, authController.getMe.bind(authController))
 routes.post("/register",authController.Register.bind(authController))
 routes.post("/login", authController.Login.bind(authController))
-routes.get("/auths", authController.getAuths.bind(authController))
 export default routes
