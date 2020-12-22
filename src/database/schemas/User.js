@@ -12,7 +12,7 @@ const UserSchema = new Schema({
     name:       { type: String, required:true, default: "Nguyen Van A" },
     username:   { type: String, required:true, index: true, unique: true, lowercase: true }, 
     password:   { type: String, required:true, },
-    id_role:    { type: ObjectId,},
+    id_role:    { type: ObjectId, default :mongoose.Types.ObjectId("5fd47e336f57041e7719e824")},
     created_at: { type: Date, default: Date.now, },
 }, options)
 

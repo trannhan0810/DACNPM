@@ -149,7 +149,7 @@ export default class OrderController extends Controller{
         }
         
     }
-
+    
     async getOrderSubmitted(req, res){
         const status = {"status" : "Submitted"}
         try {
