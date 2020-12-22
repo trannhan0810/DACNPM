@@ -4,6 +4,7 @@ import Service from '../../core/Service'
 import UserRepository from "./repository"
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
+import RoleService from '../roles/service';
 
 const salt = 10;
 
@@ -18,6 +19,8 @@ export default class AuthService extends Service{
         return AuthService.instance
     }
     
+    roleService = RoleService.getService()
+
     async registry(payload){
         try{
             const { name, username, password} = payload          
@@ -57,7 +60,12 @@ export default class AuthService extends Service{
     }
 
     async getMe(id) {
-        return this.repository.getById(id)
+        const user = await this.repository.getById(id)
+        const userObject = user.toObject();
+        console.log(userObject)
+        const role = await this.roleService.getById(userObject.id_role)
+        userObject.role = role.name
+        return userObject
     }
     
     async authorize(id, api_path, api_method) {
