@@ -1,15 +1,15 @@
 import Service from '../../core/Service'
-import RoleRepository from "./repository"
+import PermissionRepository from "./repository"
 
-export default class RoleService extends Service{
+export default class PermissionService extends Service{
     static instance;
   
     static getService() {
-        if(!RoleService.instance)
+        if(!PermissionService.instance)
         {
-            RoleService.instance = new RoleService(RoleRepository.getRepository())
+            PermissionService.instance = new PermissionService(PermissionRepository.getRepository())
         }
-        return RoleService.instance
+        return PermissionService.instance
     }
     
 }

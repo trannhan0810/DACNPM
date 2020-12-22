@@ -33,7 +33,7 @@ export let  authenticateToken = async (req, res, next) => {
     const token  =  authHeader && authHeader.split(' ')[1]
     if(token == null) throw Boom.unauthorized()
     const user = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, user) => {
-        if(err) next(Boom.unauthorized())
+        if(err) next(Boom.unauthorized("Wrong acess token"))
         req.user = user;
     })  
     if(req.user != null) {

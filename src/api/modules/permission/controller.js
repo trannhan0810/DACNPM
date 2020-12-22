@@ -1,11 +1,11 @@
 import Controller from '../../core/Controller'
-import RoleService from "./service"
-export default class RoleController extends Controller{
+import PermissionService from "./service"
+export default class PermissionController extends Controller{
 
-    service = RoleService.getService();
+    service = PermissionService.getService();
 
     constructor() {
-        super(RoleService.getService());
+        super(PermissionService.getService());
     }
 
 }
