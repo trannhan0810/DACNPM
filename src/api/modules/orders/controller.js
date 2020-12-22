@@ -122,7 +122,6 @@ export default class OrderController extends Controller{
         ))
         // console.log(result)
         res.send(result)
-        
     }
 
     async stateSubmitted(req, res){
@@ -130,7 +129,32 @@ export default class OrderController extends Controller{
         console.log(state)
         const status = {"status" : state}
         const orders = await this.service.getMany(status)
-        res.send(orders)
+        let result = await Promise.all(
+            orders.map(async order => {
+                const id = {"id_order" : order.id}
+                // const id_user = {"id" : order.id_user}
+                // console.log(id_user)
+                let orderItem = await this.orderItemService.getMany(id)
+                let user = await this.userService.getOne(order.id_user)
+                console.log(user)
+                let result2 = await Promise.all(
+                    orderItem.map(async item =>{
+                        let product = await this.productService.getById(item["id_product"])
+                        item = item["_doc"]
+                        Object.assign(item, {"product_name" : product["name"]})
+                        return item
+                    })
+                )
+                orderItem = result2
+                order = order["_doc"]
+                Object.assign(order, {"userName" : user.name})
+                return {
+                    ...order, orderItem
+                }
+            },
+        ))
+        console.log(result)
+        res.send(result)
     }
 
     async getOrderShipping(req, res){
