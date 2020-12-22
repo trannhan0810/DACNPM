@@ -178,12 +178,23 @@ export default class OrderController extends Controller{
     }
 
     async cancelOrder(req, res){
-        const {order_id} = req.body
-        const id = {"_id" : order_id}
-        const orders = await this.service.getOne(id)
-        await this.service.updateOne(order_id, {"status" : "Cancel"})
-        let orderItem = await this.orderItemService.getMany({"id_order" : order_id})
-        console.log(orderItem)
-
+        const order_id = req.params.id
+        console.log(order_id)
+        
+        const order = await this.service.updateOne(order_id, {"status" : "Cancel"})
+        console.log(order)
+        const orderItem = await this.orderItemService.getMany({"id_order" : order.id})
+        for(let i =0; i < orderItem.length; i++)
+        {
+            orderItem[i]["id_order"] = order.id                   
+            let product = await this.productService.getById(orderItem[i]["id_product"])                  
+            console.log(product["quantity"])
+            console.log(orderItem[i]["quantity"])
+            product["quantity"] = product["quantity"] + orderItem[i]["quantity"]
+            await this.productService.updateOne(product.id, {"quantity" : product["quantity"]})         
+        }
+        const afterOrder = await this.service.getOne({"_id" : order_id})
+        
+        res.send(afterOrder)
     }
 }
