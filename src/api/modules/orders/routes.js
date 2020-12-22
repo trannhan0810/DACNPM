@@ -15,4 +15,5 @@ routes.get("/status/:state", orderController.stateSubmitted.bind(orderController
 routes.get("/state/shipping", orderController.getOrderShipping.bind(orderController))
 routes.get("/state/processing", orderController.getOrderProcessing.bind(orderController))
 routes.get("/state/submitted", orderController.getOrderSubmitted.bind(orderController))
+routes.put("/cancelOrder", orderController.cancelOrder.bind(orderController))
 export default routes

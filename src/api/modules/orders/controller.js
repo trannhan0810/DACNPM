@@ -22,7 +22,7 @@ export default class OrderController extends Controller{
     async createOne(req, res){
         const data = req.body;
     
-        let order = await this.service.createOne(data)
+       
         console.log("New Order :   ")
         console.log(order)
         const {items} = req.body
@@ -37,6 +37,7 @@ export default class OrderController extends Controller{
         }
         if(check){
             try {
+                let order = await this.service.createOne(data)
                 for(let i = 0; i< items.length; i++){
                     
                     items[i]["id_order"] = order.id
@@ -149,7 +150,7 @@ export default class OrderController extends Controller{
         }
         
     }
-    
+
     async getOrderSubmitted(req, res){
         const status = {"status" : "Submitted"}
         try {
@@ -177,6 +178,15 @@ export default class OrderController extends Controller{
         } catch (error) {
             res.status(404).send("Not found")
         }
-        
+    }
+
+    async cancelOrder(req, res){
+        const {order_id} = req.body
+        const id = {"_id" : order_id}
+        const orders = await this.service.getOne(id)
+        await this.service.updateOne(order_id, {"status" : "Cancel"})
+        let orderItem = await this.orderItemService.getMany({"id_order" : order_id})
+        console.log(orderItem)
+
     }
 }
