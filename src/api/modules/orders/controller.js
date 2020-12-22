@@ -137,13 +137,42 @@ export default class OrderController extends Controller{
 
     async getOrderShipping(req, res){
         const status = {"status" : "Shipping"}
-        console.log("yeah bitch")
         try {
             const orders = await this.service.getMany(status)
             if(orders.length!=0){
                 res.status(200).send(orders)
             }else{
                 res.status(200).send("No Order need to ship")
+            }
+        } catch (error) {
+            res.status(404).send("Not found")
+        }
+        
+    }
+
+    async getOrderSubmitted(req, res){
+        const status = {"status" : "Submitted"}
+        try {
+            const orders = await this.service.getMany(status)
+            if(orders.length!=0){
+                res.status(200).send(orders)
+            }else{
+                res.status(200).send("No Order need to process")
+            }
+        } catch (error) {
+            res.status(404).send("Not found")
+        }
+        
+    }
+
+    async getOrderProcessing(req, res){
+        const status = {"status" : "Processing"}
+        try {
+            const orders = await this.service.getMany(status)
+            if(orders.length!=0){
+                res.status(200).send(orders)
+            }else{
+                res.status(200).send("No Order need to process")
             }
         } catch (error) {
             res.status(404).send("Not found")
