@@ -4,6 +4,7 @@ import OrderService from './service';
 import ProductService from '../products/service'
 import OrderItemService from '../order_item/service'
 import UserService from '../users/service'
+import ShippingOrderService from '../shipping_order/service'
 var mongoose = require('mongoose');
 export default class OrderController extends Controller{
 
@@ -11,6 +12,7 @@ export default class OrderController extends Controller{
     productService  = ProductService.getService();
     orderItemService = OrderItemService.getService();
     userService = UserService.getService();
+    shippingOrderService = ShippingOrderService.getService();
     constructor() {
         super(OrderService.getService());
     }
@@ -158,13 +160,22 @@ export default class OrderController extends Controller{
     }
 
     async getOrderShipping(req, res){
+        const shipper_id = req.params.id
+        const orderTakens = await this.shippingOrderService.getMany({id_shipper : shipper_id, status : "isTaken"})
+        
         const status = {"status" : "Shipping"}
         try {
             const orders = await this.service.getMany(status)
             if(orders.length!=0){
-                res.status(200).send(orders)
+                console.log("yup")
+                Array.prototype.push.apply(orderTakens, orders); 
+                
+                res.status(200).send(orderTakens)
             }else{
-                res.status(200).send("No Order need to ship")
+                if(orderTakens.length!=0){
+                    res.status(200).send(orderTakens)
+                }else
+                    res.status(200).send("No Order need to ship")
             }
         } catch (error) {
             res.status(404).send("Not found")
@@ -231,5 +242,63 @@ export default class OrderController extends Controller{
         await this.service.updateOne(order_id, {"status" : status})
         order = await this.service.getOne({"_id" : order_id})
         res.send(order)
+    }
+
+    async takenOrder(req, res){
+        const order_id = req.params.id
+        const shipper_id = req.body.user_id
+        let order = await this.service.getOne({"_id" : order_id})
+    
+        if(order.status == "Shipping"){
+            let shipper = await this.userService.getOne({"_id" : shipper_id})
+            await this.service.updateOne(order_id, {"status" : "isTaken"})
+            const shipperOrder = {
+                "id_shipper" : shipper_id,
+                "id_order" : order_id,  
+                "Money" : order.totalPrice,
+            }
+            let orderShip = await this.shippingOrderService.createOne(shipperOrder)
+            res.send(orderShip);
+        }
+    }
+
+    async getStateShippingOrder(req, res){
+        console.log("NOOO")
+        const orders = await this.service.getMany({$or : [{"status" : "isTaken"}, {"status" : "Success"}, {"status" : "Done"}]})
+        let result = await Promise.all(
+            orders.map(async order => {
+                const id = {"id_order" : order.id}
+                // const id_user = {"id" : order.id_user}
+                // console.log(id_user)
+                let orderItem = await this.orderItemService.getMany(id)
+                let user = await this.userService.getOne(order.id_user)
+                let shippingOrder = await this.shippingOrderService.getOne(id)
+                console.log(shippingOrder)
+        
+                let result2 = await Promise.all(
+                    orderItem.map(async item =>{
+                        let product = await this.productService.getById(item["id_product"])
+                        item = item["_doc"]
+                        Object.assign(item, {"product_name" : product["name"]})
+                        
+                        return item
+                    })
+                )
+                orderItem = result2
+                order = order["_doc"]
+                Object.assign(order, {"Customer's Name" : user.name})
+                
+                
+                
+                let shipper = await this.userService.getOne({"_id" : shippingOrder["id_shipper"]})
+                Object.assign(order, {"Shipper's Name" : shipper.name})
+                Object.assign(order, {"Shipper's username" : shipper.userName})
+                return {
+                    ...order, orderItem
+                }
+            },
+        ))
+        res.status(200).send(result)
+        
     }
 }
