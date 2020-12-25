@@ -166,11 +166,12 @@ export default class OrderController extends Controller{
         const status = {"status" : "Shipping"}
         try {
             const orders = await this.service.getMany(status)
+            console.log(orders)
             if(orders.length!=0){
                 console.log("yup")
-                Array.prototype.push.apply(orderTakens, orders); 
+                Array.prototype.push.apply(orders, orderTakens); 
                 
-                res.status(200).send(orderTakens)
+                res.status(200).send(orders)
             }else{
                 if(orderTakens.length!=0){
                     res.status(200).send(orderTakens)
@@ -254,7 +255,9 @@ export default class OrderController extends Controller{
             await this.service.updateOne(order_id, {"status" : "isTaken"})
             const shipperOrder = {
                 "id_shipper" : shipper_id,
-                "id_order" : order_id,  
+                "id_order" : order_id,
+                "id_user" : order.id_user,
+                "customer_phone" : order.customer_phone,  
                 "Money" : order.totalPrice,
             }
             let orderShip = await this.shippingOrderService.createOne(shipperOrder)
