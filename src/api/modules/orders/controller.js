@@ -166,12 +166,20 @@ export default class OrderController extends Controller{
         const status = {"status" : "Shipping"}
         try {
             const orders = await this.service.getMany(status)
-            console.log(orders)
+            
+            let result = await Promise.all(
+                orders.map(async order => {
+                    order = order["_doc"]
+                    Object.assign(order, {"id_shipper" : ""})
+                    Object.assign(order, {"id_order" : order["_id"]})
+                    return order
+                }))
+            console.log(result)
             if(orders.length!=0){
                 console.log("yup")
-                Array.prototype.push.apply(orders, orderTakens); 
+                Array.prototype.push.apply(result, orderTakens); 
                 
-                res.status(200).send(orders)
+                res.status(200).send(result)
             }else{
                 if(orderTakens.length!=0){
                     res.status(200).send(orderTakens)
@@ -252,13 +260,14 @@ export default class OrderController extends Controller{
         
         if(order.status == "Shipping"){
             let shipper = await this.userService.getOne({"_id" : shipper_id})
+
             await this.service.updateOne(order_id, {"status" : "isTaken"})
             const shipperOrder = {
                 "id_shipper" : shipper_id,
                 "id_order" : order_id,
                 "id_user" : order.id_user,
                 "customer_phone" : order.customer_phone,  
-                "Money" : order.totalPrice,
+                "totalPrice" : order.totalPrice,
             }
             let orderShip = await this.shippingOrderService.createOne(shipperOrder)
             res.send(orderShip);
