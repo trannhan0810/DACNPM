@@ -6,7 +6,7 @@ import productRoutes from './modules/products/routes'
 import authRoute from './modules/auth/routes'
 import roleRoute from './modules/roles/routes'
 import orderRoute from './modules/orders/routes'
-import permissRoute from './modules/orders/routes'
+import permissRoute from './modules/permission/routes'
 
 const routes = Router()
 routes.use('/users', userRoutes);
