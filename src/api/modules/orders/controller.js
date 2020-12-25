@@ -221,4 +221,15 @@ export default class OrderController extends Controller{
         
         res.send(afterOrder)
     }
+
+    async changeStatus(req, res){
+        const order_id = req.params.id
+        const status = req.query.status
+        console.log(status)
+        let order = await this.service.getOne({"_id" : order_id})
+        console.log(order)
+        await this.service.updateOne(order_id, {"status" : status})
+        order = await this.service.getOne({"_id" : order_id})
+        res.send(order)
+    }
 }
