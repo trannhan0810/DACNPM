@@ -63,10 +63,11 @@ export default class AuthService extends Service{
         try{
             if(id == null) throw Boom.unauthorized("missing id");
             const user = await this.repository.getById(id)
-            const userObject = user.toObject();
-            const role = await this.roleService.getById(userObject.id_role)
-            userObject.role = role.name
-            return userObject
+            //const userObject = user.toObject();
+            //const role = await this.roleService.getById(userObject.id_role)
+            //userObject.role = role.name
+            //return userObject
+            return user
         } catch {
             throw err
         }

@@ -8,6 +8,8 @@ import roleRoute from './modules/roles/routes'
 import orderRoute from './modules/orders/routes'
 import permissRoute from './modules/permission/routes'
 
+import permissRoute from './modules/orders/routes'
+import shippingOrderRoute from './modules/shipping_order/routes'
 const routes = Router()
 routes.use('/users', userRoutes);
 routes.use('/brands', brandRoutes);
@@ -17,4 +19,5 @@ routes.use('/roles', roleRoute)
 routes.use('/', authRoute);
 routes.use('/orders', orderRoute);
 routes.use('/permissions', permissRoute)
+routes
 export default routes
