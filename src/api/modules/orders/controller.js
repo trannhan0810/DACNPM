@@ -161,7 +161,7 @@ export default class OrderController extends Controller{
 
     async getOrderShipping(req, res){
         const shipper_id = req.params.id
-        const orderTakens = await this.shippingOrderService.getMany({id_shipper : shipper_id, status : "isTaken"})
+        const orderTakens = await this.shippingOrderService.getMany({$or : [{id_shipper : shipper_id, status : "isTaken"}, {id_shipper : shipper_id, status : "Success"}]})
         
         const status = {"status" : "Shipping"}
         try {
@@ -248,7 +248,7 @@ export default class OrderController extends Controller{
         const order_id = req.params.id
         const shipper_id = req.body.user_id
         let order = await this.service.getOne({"_id" : order_id})
-    
+        
         if(order.status == "Shipping"){
             let shipper = await this.userService.getOne({"_id" : shipper_id})
             await this.service.updateOne(order_id, {"status" : "isTaken"})
@@ -261,6 +261,15 @@ export default class OrderController extends Controller{
             res.send(orderShip);
         }
     }
+
+    async orderSuccess(req, res){
+        const order_id = req.params.id
+        let shippingOrder = await this.shippingOrderService.getOne({"id_order" : order_id})
+        const status = {"status" : "Success"}
+        await this.shippingOrderService.updateOne(shippingOrder.id, status)
+        await this.service.updateOne(order_id, status)
+        res.send("Done")
+    } 
 
     async getStateShippingOrder(req, res){
         console.log("NOOO")
@@ -299,6 +308,16 @@ export default class OrderController extends Controller{
             },
         ))
         res.status(200).send(result)
+        
+    }
+
+    async statisticsRevenue(req, res){
+        const orders = await this.service.getMany()
+        orders.forEach(order => {
+            
+        });
+        var datetime = new Date();
+        console.log(datetime.getDate())
         
     }
 }
