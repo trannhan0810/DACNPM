@@ -17,7 +17,7 @@ routes.get("/state/processing", orderController.getOrderProcessing.bind(orderCon
 routes.get("/state/submitted", orderController.getOrderSubmitted.bind(orderController))
 routes.put("/cancelOrder/:id", orderController.cancelOrder.bind(orderController))
 routes.post("/changeStatus/:id", orderController.changeStatus.bind(orderController))
-routes.post("/takeOrder/:id", orderController.takenOrder.bind(orderController))
+routes.put("/state/takeOrder/:id", orderController.takenOrder.bind(orderController))
 routes.get("/ShippingOrder/getFullOrderShipping", orderController.getStateShippingOrder.bind(orderController))
 routes.get("/statistic/Revenue", orderController.statisticsRevenue.bind(orderController))
 routes.put("/state/done/:id", orderController.orderSuccess.bind(orderController))
