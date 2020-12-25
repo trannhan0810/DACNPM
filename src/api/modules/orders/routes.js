@@ -21,4 +21,7 @@ routes.put("/state/takeOrder/:id", orderController.takenOrder.bind(orderControll
 routes.get("/ShippingOrder/getFullOrderShipping", orderController.getStateShippingOrder.bind(orderController))
 routes.get("/statistic/Revenue", orderController.statisticsRevenue.bind(orderController))
 routes.put("/state/done/:id", orderController.orderSuccess.bind(orderController))
+routes.put("/customer/cancelOrder/:id", orderController.deleteOrderFromUser.bind(orderController))
+routes.put("/shop/cancelOrder/:id", orderController.deleteOrderFromShop.bind(orderController))
+routes.get("/statistic/getShipperIsTaking", orderController.getShipperTakeOrder.bind(orderController))
 export default routes

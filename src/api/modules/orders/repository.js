@@ -32,4 +32,6 @@ export default class OrderRepository extends Repository {
         console.log("respon" + payload)
         OrderItem.find(payload)
     }
+
+    
 }

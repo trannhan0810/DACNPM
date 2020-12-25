@@ -285,7 +285,7 @@ export default class OrderController extends Controller{
 
     async getStateShippingOrder(req, res){
         console.log("NOOO")
-        const orders = await this.service.getMany({$or : [{"status" : "isTaken"}, {"status" : "Success"}, {"status" : "Done"}]})
+        const orders = await this.service.getMany({$or : [{"status" : "isTaken"}, {"status" : "Success"}, {"status" : "Complete"}]})
         let result = await Promise.all(
             orders.map(async order => {
                 const id = {"id_order" : order.id}
@@ -324,12 +324,80 @@ export default class OrderController extends Controller{
     }
 
     async statisticsRevenue(req, res){
-        const orders = await this.service.getMany()
-        orders.forEach(order => {
-            
-        });
-        var datetime = new Date();
-        console.log(datetime.getDate())
+        let {time_from} = req.body
+        let {time_to} = req.body 
+        let time_gt = new Date(time_from)
+        // console.log(time_gt)
+        // let time_convert = time_gt.getFullYear() + "-" + (time_gt.getMonth()+1) + "-" + (time_gt.getDate()+1)
+        let time_lt = new Date(time_to)
+        // console.log(time_convert)
         
+        const orders = await this.service.getMany({create_at:{
+            $gte: time_gt,
+            $lt: time_lt
+        }})
+        let revenue = 0
+        orders.forEach(order => {
+            revenue  += order.totalPrice
+        });
+        let money_get = 0
+        orders.forEach(order => {
+            if(order.status == "Complete"){
+                money_get += order.totalPrice
+            }
+        });
+       
+        let result = await Promise.all(
+            orders.map(async order => {
+                const id = {"id_order" : order.id}
+                
+                let orderItem = await this.orderItemService.getMany(id)
+                
+                let result2 = await Promise.all(
+                    orderItem.map(async item =>{
+                        let product = await this.productService.getById(item["id_product"])
+                        item = item["_doc"]
+                        Object.assign(item, {"product_name" : product["name"]})
+                        return item
+                    })
+                )
+                orderItem = result2
+                order = order["_doc"]
+                return {
+                    ...order, orderItem
+                }
+            },
+        ))
+        let data = {
+            "order" : result,
+            "revenue" : revenue,
+            "money_get" : money_get
+        }
+        res.send(data)
+    }
+
+    async deleteOrderFromUser(req, res){
+        const order_id = req.params.id
+        const order = await this.service.getOne({"_id":order_id})
+        if(order.status == "Submitted" | order.status == "Processing"){
+            let newStatus = "Cancel"
+            await this.service.updateOne(order_id, {"status" : newStatus})
+            res.status(200).send(await this.service.getOne({"_id":order_id}))
+        }else{
+            res.status(403).send("Sorry, you can not cancel your order now. It's on the way to your location")
+        }
+    }
+
+    async deleteOrderFromShop(req, res){
+        const order_id = req.params.id
+        const order = await this.service.getOne({"_id":order_id})
+        let newStatus = "Cancel"
+        await this.service.updateOne(order_id, {"status" : newStatus})
+        res.status(200).send(await this.service.getOne({"_id":order_id}))
+    }
+
+    async getShipperTakeOrder(req, res){
+        const orders = await this.shippingOrderService.getMany({$or : [{"status" : "isTaken"}, {"status" : "Success"}]})
+        res.status(400).send(orders)
     }
 }
