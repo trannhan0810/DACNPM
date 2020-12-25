@@ -398,6 +398,19 @@ export default class OrderController extends Controller{
 
     async getShipperTakeOrder(req, res){
         const orders = await this.shippingOrderService.getMany({$or : [{"status" : "isTaken"}, {"status" : "Success"}]})
-        res.status(400).send(orders)
+        let result = await Promise.all(
+            orders.map(async order => {
+                const shipper_id = {"id_shipper" : order.id_shipper}
+                console.log(order.id_shipper)
+                let shipper = await this.userService.getById(order.id_shipper)
+                
+                
+                order = order["_doc"]
+                Object.assign(order, {"Shipper's name" : shipper.name})
+                Object.assign(order, {"Shipper's username " :shipper.username})
+                return order
+            },
+        ))
+        res.status(200).send(result)
     }
 }
