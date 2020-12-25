@@ -20,9 +20,9 @@ export default class UserRepository extends Repository {
         return UserRepository.instance
     }
 
-    getById(id, column = []) {
-        let user = this.model.findById(id).select(column)
-        user.populate("id_role")
-        return user
-    } 
+    //getById(id, column = []) {
+    //    let user = this.model.findById(id).select(column)
+    //    user.populate("id_role")
+    //    return user
+    //} 
 }
