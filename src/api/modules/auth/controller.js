@@ -35,16 +35,10 @@ export let  authenticateToken = async (req, res, next) => {
     const user = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, user) => {
         if(err) next(Boom.unauthorized("Wrong acess token"))
         req.user = user;
-    })  
-    if(req.user != null) {
-        const id = req.user.id
         const api_path = req.baseUrl + req.route.path
         const api_method = req.method
-        const haveAuthor = await AuthService.getService().authorize(id, api_path, api_method)
-        if(haveAuthor == false) throw Boom.forbidden()
+        const haveAuthor = await AuthService.getService().authorize(user.id, api_path, api_method)
+        if(haveAuthor == false) next(Boom.forbidden("Not have permission"))
         next() 
-    }
-    
-    
-   
+    })  
 }

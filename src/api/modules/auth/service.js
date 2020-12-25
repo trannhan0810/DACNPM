@@ -60,24 +60,27 @@ export default class AuthService extends Service{
     }
 
     async getMe(id) {
-        const user = await this.repository.getById(id)
-        const userObject = user.toObject();
-        console.log(userObject)
-        const role = await this.roleService.getById(userObject.id_role)
-        userObject.role = role.name
-        return userObject
+        try{
+            if(id == null) throw Boom.unauthorized("missing id");
+            const user = await this.repository.getById(id)
+            const userObject = user.toObject();
+            const role = await this.roleService.getById(userObject.id_role)
+            userObject.role = role.name
+            return userObject
+        } catch {
+            throw err
+        }
     }
     
-    async authorize(id, api_path, api_method) {
+    async authorize(user_id, api_path, api_method) {
         const [userPermission, routePermission] = await Promise.all([
-            this.repository.getPermission(id),
+            this.repository.getUserPermission(user_id),
             this.repository.getRoutePermission(api_path, api_method)
         ])
         console.log([userPermission, routePermission])
         if(routePermission == null) return true;
-        if(userPermission.some((value)=> value === routePermission)) {
-            return true;
-        }
+        if(userPermission.find((value)=>((String)(value.id_per)==(String)(routePermission.id_per)))) return true
+        
         return false;  
     }
 }

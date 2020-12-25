@@ -31,12 +31,11 @@ export default class UserRepository extends Repository {
         return this.model.findOne(condition).select(column)
     }
     
-    async getPermission(id) {
+    async getUserPermission(id) {
         const user = await this.model.findById(id)
         const id_role = user.id_role
-        const ids_permission = await Permiss_Detail.find({'id_role': id_role})
-        const permissions = await Permission.find({'_id': { $in: ids_permission}})
-        return permissions
+        const ids_permission = await Permiss_Detail.find({'id_role': id_role}).select('id_per')
+        return ids_permission
     }
 
     async getRoutePermission(api_path, api_method) {
