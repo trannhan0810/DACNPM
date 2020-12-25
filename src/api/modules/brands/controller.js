@@ -1,6 +1,5 @@
 import Controller from '../../core/Controller'
 import BrandService from './service';
-import UserService from "./service"
  
 export default class BrandController extends Controller{
 
