@@ -334,10 +334,11 @@ export default class OrderController extends Controller{
         let time_lt = new Date(time_to)
         // console.log(time_convert)
         
-        const orders = await this.service.getMany({create_at:{
-            $gte: time_gt,
-            $lt: time_lt
-        }})
+        const orders = await this.service.getMany(
+            {   
+                $and : [
+                    {create_at:{$gte: time_gt,$lt: time_lt}}
+        ,           {status: {$ne: "Cancel"} }]})
         let revenue = 0
         orders.forEach(order => {
             revenue  += order.totalPrice
