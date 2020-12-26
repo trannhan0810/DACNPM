@@ -363,6 +363,8 @@ export default class OrderController extends Controller{
                 )
                 orderItem = result2
                 order = order["_doc"]
+                let customer = await this.userService.getById(order.id_user)
+                Object.assign(order, {"Customer's name" : customer.name})
                 return {
                     ...order, orderItem
                 }
