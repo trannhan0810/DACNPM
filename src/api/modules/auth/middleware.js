@@ -8,6 +8,7 @@ export default async (req, res, next) => {
     
     const api_path = req.baseUrl + req.route.path
     const api_method = req.method
+    const userPermiss = await AuthService.getService().getUserPermission(user,id)
     const routePermiss = await AuthService.getService().getRoutePermission(api_path, api_method)
     if(routePermiss == null) next()
     else {
@@ -18,7 +19,7 @@ export default async (req, res, next) => {
             if(err) next(Boom.unauthorized("Wrong acess token"))
             req.user = user;
     
-            const userPermiss = await AuthService.getService().getUserPermission(user,id)
+            
             if(userPermission.find((value)=>((String)(value.id_per)==(String)(routePermission.id_per))))  next()  
             else next(Boom.forbidden("Not have permission"))
         })  
