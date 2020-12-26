@@ -7,9 +7,9 @@ const categoryController = new CategoryController()
 
 routes.get("/", categoryController.getMany.bind(categoryController))
 routes.get("/:id", categoryController.getById.bind(categoryController))
-routes.post("/", authorization, categoryController.createOne.bind(categoryController))
-routes.delete("/:id", authorization, categoryController.deleteOne.bind(categoryController))
-routes.put("/:id", authorization, categoryController.updateOne.bind(categoryController))
+routes.post("/", categoryController.createOne.bind(categoryController))
+routes.delete("/:id", categoryController.deleteOne.bind(categoryController))
+routes.put("/:id", categoryController.updateOne.bind(categoryController))
 
 
 export default routes
