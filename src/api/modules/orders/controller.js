@@ -382,7 +382,20 @@ export default class OrderController extends Controller{
         if(order.status == "Submitted" | order.status == "Processing"){
             let newStatus = "Cancel"
             await this.service.updateOne(order_id, {"status" : newStatus})
-            res.status(200).send(await this.service.getOne({"_id":order_id}))
+            const orderItem = await this.orderItemService.getMany({"id_order" : order.id})
+            for(let i =0; i < orderItem.length; i++)
+            {
+                orderItem[i]["id_order"] = order.id                   
+                let product = await this.productService.getById(orderItem[i]["id_product"])                  
+                console.log(product["quantity"])
+                console.log(orderItem[i]["quantity"])
+                product["quantity"] = product["quantity"] + orderItem[i]["quantity"]
+                await this.productService.updateOne(product.id, {"quantity" : product["quantity"]})         
+            }
+            const afterOrder = await this.service.getOne({"_id" : order_id})
+        
+            res.send(afterOrder)
+         
         }else{
             res.status(403).send("Sorry, you can not cancel your order now. It's on the way to your location")
         }
