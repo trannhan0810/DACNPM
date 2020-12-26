@@ -84,4 +84,21 @@ export default class AuthService extends Service{
         
         return false;  
     }
+
+    async getUserPermission(id) {
+        try {
+        return this.repository.getUserPermission(id)
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    async getRoutePermission(api_path, api_method) {
+        try {
+            return this.repository.getRoutePermission(api_path, api_method)
+        } catch (err) {
+            console.log(err)
+        }
+        
+    }
 }
