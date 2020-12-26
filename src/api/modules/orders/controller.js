@@ -5,6 +5,7 @@ import ProductService from '../products/service'
 import OrderItemService from '../order_item/service'
 import UserService from '../users/service'
 import ShippingOrderService from '../shipping_order/service'
+import ProductLowService from '../product_low/service'
 var mongoose = require('mongoose');
 export default class OrderController extends Controller{
 
@@ -13,6 +14,7 @@ export default class OrderController extends Controller{
     orderItemService = OrderItemService.getService();
     userService = UserService.getService();
     shippingOrderService = ShippingOrderService.getService();
+    productLowService = ProductLowService.getService()
     constructor() {
         super(OrderService.getService());
     }
@@ -427,5 +429,30 @@ export default class OrderController extends Controller{
             },
         ))
         res.status(200).send(result)
+    }
+
+    async syncProduct(req, res){
+        let products = await this.productService.getMany()
+        let i = 0;
+        let id_brand = {"id_brand" : "5f94565eec925e046a5d4e91"}
+        let products_lap = await this.productService.getMany(id_brand)
+        products_lap.forEach(product => {
+            if(i>20){
+                return false
+            }else{
+                this.productLowService.createOne(product)
+                i++
+            }
+        });
+        return true
+    }
+
+    async orderComplete(req, res){
+        const order_id = req.params.id
+        let shippingOrder = await this.shippingOrderService.getOne({"id_order" : order_id})
+        const status = {"status" : "Complete"}
+        await this.shippingOrderService.updateOne(shippingOrder.id, status)
+        await this.service.updateOne(order_id, status)
+        res.send("Done")
     }
 }
